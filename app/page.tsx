@@ -33,7 +33,16 @@ export default function Home() {
             </a>{" "}
             center.
           </p>
-          <p>ハローワールド！</p>
+          <div className="w-full overflow-hidden">
+          <div className="flex animate-[marquee_10s_linear_infinite]">
+            <p className="rainbow-text text-6xl font-bold whitespace-nowrap pr-8">
+              ハローワールド！
+            </p>
+            <p className="rainbow-text text-6xl font-bold whitespace-nowrap pr-8">
+              ハローワールド！
+            </p>
+          </div>
+        </div>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
