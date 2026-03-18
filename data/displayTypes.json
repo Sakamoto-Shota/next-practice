@@ -1,0 +1,6 @@
+{
+  "options": [
+    { "id": "ring-only", "label": "リング単体" },
+    { "id": "wearing", "label": "着用イメージ" }
+  ]
+}
