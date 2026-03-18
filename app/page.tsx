@@ -29,14 +29,13 @@ export default function Home() {
   };
 
   const handleGenerate = () => {
-    // 次のステップ（仮画像表示）で使用
     console.log("生成", { selectedParts, displayType });
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black md:flex-row">
+    <main className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950 md:flex-row">
       {/* SP: 縦並び / PC: 左カラム */}
-      <div className="flex flex-col gap-6 border-b border-zinc-200 p-4 dark:border-zinc-800 dark:bg-zinc-950 md:w-1/3 md:border-b-0 md:border-r md:p-6">
+      <div className="flex flex-col gap-8 border-b border-slate-200/80 bg-white p-6 shadow-sm dark:border-slate-800/50 dark:bg-slate-900/95 md:w-[380px] md:flex-shrink-0 md:border-b-0 md:border-r md:shadow-lg">
         <Header />
         <PartsSelector
           selectedParts={selectedParts}
@@ -52,7 +51,7 @@ export default function Home() {
       </div>
 
       {/* SP: 縦並び / PC: 右カラム */}
-      <div className="flex flex-1 flex-col p-4 md:p-6">
+      <div className="flex flex-1 flex-col p-6 md:p-10">
         <ResultPreview />
       </div>
     </main>

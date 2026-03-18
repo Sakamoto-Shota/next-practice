@@ -14,8 +14,8 @@ export default function DisplayTypeToggle({
   onSelectDisplayType,
 }: DisplayTypeToggleProps) {
   return (
-    <section className="flex flex-col gap-2">
-      <h2 className="text-lg font-medium text-black dark:text-zinc-50">
+    <section className="flex flex-col gap-3">
+      <h2 className="text-lg font-medium text-slate-700 dark:text-slate-300">
         表示する画像を選ぶ
       </h2>
       <div className="flex gap-2">
@@ -23,10 +23,10 @@ export default function DisplayTypeToggle({
           <button
             key={option.id}
             onClick={() => onSelectDisplayType(option.id)}
-            className={`rounded border-2 px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
               displayType === option.id
-                ? "border-zinc-900 bg-zinc-100 hover:bg-zinc-200 dark:border-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"
-                : "border-zinc-300 bg-white hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                ? "border-slate-800 bg-slate-100 text-slate-800 shadow-sm dark:border-slate-400 dark:bg-slate-800/80 dark:text-slate-100"
+                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800"
             }`}
             aria-pressed={displayType === option.id}
           >

@@ -40,39 +40,60 @@ function DownloadIcon() {
 
 export default function ResultPreview() {
   return (
-    <section className="flex flex-col gap-3">
-      <div className="relative flex min-h-[280px] w-full items-center justify-center rounded-lg bg-zinc-200 dark:bg-zinc-800 md:min-h-[400px]">
-        <p className="text-zinc-500 dark:text-zinc-400">生成画像表示エリア</p>
+    <section className="flex flex-col gap-4">
+      <div className="relative flex min-h-[320px] w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-gradient-to-br from-slate-50 via-slate-100/50 to-slate-200/30 dark:border-slate-700 dark:from-slate-900/80 dark:via-slate-800/50 dark:to-slate-900 md:min-h-[480px]">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <div className="rounded-full bg-slate-200/80 p-4 dark:bg-slate-700/50">
+            <svg
+              className="h-12 w-12 text-slate-500 dark:text-slate-400"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="8" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </div>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            生成画像表示エリア
+          </p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">
+            「デザインを作成」をクリックしてプレビューを表示
+          </p>
+        </div>
         {/* PC: 右下にアイコン */}
-        <div className="absolute bottom-4 right-4 hidden gap-2 md:flex">
+        <div className="absolute bottom-5 right-5 hidden gap-2 md:flex">
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 transition-colors hover:bg-zinc-400 dark:bg-zinc-600 dark:hover:bg-zinc-500"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm transition-all hover:bg-white hover:shadow-md dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-slate-800"
             aria-label="アップロード"
           >
             <UploadIcon />
           </button>
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 transition-colors hover:bg-zinc-400 dark:bg-zinc-600 dark:hover:bg-zinc-500"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm transition-all hover:bg-white hover:shadow-md dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-slate-800"
             aria-label="ダウンロード"
           >
             <DownloadIcon />
           </button>
         </div>
       </div>
-      {/* SP: アイコンを下に、右寄せ */}
-      <div className="flex justify-end gap-2 md:hidden">
+      {/* SP: アイコンを下に */}
+      <div className="flex justify-end gap-3 md:hidden">
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 transition-colors hover:bg-zinc-400 dark:bg-zinc-600 dark:hover:bg-zinc-500"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
           aria-label="アップロード"
         >
           <UploadIcon />
         </button>
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 transition-colors hover:bg-zinc-400 dark:bg-zinc-600 dark:hover:bg-zinc-500"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
           aria-label="ダウンロード"
         >
           <DownloadIcon />
