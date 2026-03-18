@@ -1,45 +1,24 @@
+import Header from "./components/Header";
+import PartsSelector from "./components/PartsSelector";
+import DisplayTypeToggle from "./components/DisplayTypeToggle";
+import GenerateButton from "./components/GenerateButton";
+import ResultPreview from "./components/ResultPreview";
+
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-          指輪のデザインを作成
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-          お好みのパーツを組み合わせて指輪のデザインを作成できます。
-          </p>
-          <div className="w-full overflow-hidden">
-          <div className="flex animate-[marquee_10s_linear_infinite]">
-          <h2 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-          パーツを選ぶ
-          </h2>
-          <h3 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-          リング         
-          </h3>
-          </div>
-        </div>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-           
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="flex min-h-screen bg-zinc-50 font-sans dark:bg-black">
+      {/* 左カラム：操作パネル */}
+      <div className="flex w-1/3 flex-col gap-6  border-zinc-200 p-6 dark:border-zinc-800 dark:bg-zinc-950">
+        <Header />
+        <PartsSelector />
+        <DisplayTypeToggle />
+        <GenerateButton />
+      </div>
+
+      {/* 右カラム：プレビューエリア */}
+      <div className="flex w-2/3 p-6">
+        <ResultPreview />
+      </div>
+    </main>
   );
 }
