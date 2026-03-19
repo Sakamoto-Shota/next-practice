@@ -7,11 +7,13 @@ const displayTypes = displayTypesData.options as { id: string; label: string }[]
 type DisplayTypeToggleProps = {
   displayType: string;
   onSelectDisplayType: (id: string) => void;
+  disabled?: boolean; 
 };
 
 export default function DisplayTypeToggle({
   displayType,
   onSelectDisplayType,
+  disabled = false,
 }: DisplayTypeToggleProps) {
   return (
     <section className="flex flex-col gap-3">
@@ -23,7 +25,8 @@ export default function DisplayTypeToggle({
           <button
             key={option.id}
             onClick={() => onSelectDisplayType(option.id)}
-            className={`flex-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-all duration-200 ${
+            disabled={disabled}
+            className={`flex-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none ${
               displayType === option.id
                 ? "border-slate-800 bg-slate-100 text-slate-800 shadow-sm dark:border-slate-400 dark:bg-slate-800/80 dark:text-slate-100"
                 : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800"

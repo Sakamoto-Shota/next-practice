@@ -38,10 +38,35 @@ function DownloadIcon() {
   );
 }
 
-export default function ResultPreview() {
+type ResultPreviewProps = {
+  imageUrl: string | null;
+  isGenerating?: boolean;
+};
+
+export default function ResultPreview({
+  imageUrl,
+  isGenerating = false,
+}: ResultPreviewProps) {
   return (
     <section className="flex flex-col gap-4">
       <div className="relative flex min-h-[320px] w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-gradient-to-br from-slate-50 via-slate-100/50 to-slate-200/30 dark:border-slate-700 dark:from-slate-900/80 dark:via-slate-800/50 dark:to-slate-900 md:min-h-[480px]">
+        {isGenerating ? (
+          <div className="flex flex-col items-center gap-4">
+            <div
+              className="h-12 w-12 animate-spin rounded-full border-4 border-slate-300 border-t-slate-600 dark:border-slate-600 dark:border-t-slate-400"
+              aria-hidden
+            />
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              作成中
+            </p>
+          </div>
+        ) : imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="生成された指輪"
+            className="max-h-full max-w-full object-contain"
+          />
+        ) : (
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="rounded-full bg-slate-200/80 p-4 dark:bg-slate-700/50">
             <svg
@@ -64,26 +89,11 @@ export default function ResultPreview() {
             「デザインを作成」をクリックしてプレビューを表示
           </p>
         </div>
-        {/* PC: 右下にアイコン */}
-        <div className="absolute bottom-5 right-5 hidden gap-2 md:flex">
-          <button
-            type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm transition-all hover:bg-white hover:shadow-md dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-slate-800"
-            aria-label="アップロード"
-          >
-            <UploadIcon />
-          </button>
-          <button
-            type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-600 shadow-sm transition-all hover:bg-white hover:shadow-md dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-400 dark:hover:bg-slate-800"
-            aria-label="ダウンロード"
-          >
-            <DownloadIcon />
-          </button>
-        </div>
-      </div>
-      {/* SP: アイコンを下に */}
-      <div className="flex justify-end gap-3 md:hidden">
+        )}
+           </div> 
+      {/* ボタンは常に画像の下（PC/SP共通）*/}
+      {!isGenerating && (
+      <div className="flex justify-end gap-3">
         <button
           type="button"
           className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
@@ -99,6 +109,7 @@ export default function ResultPreview() {
           <DownloadIcon />
         </button>
       </div>
+      )}
     </section>
   );
 }

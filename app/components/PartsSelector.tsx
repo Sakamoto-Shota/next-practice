@@ -9,6 +9,7 @@ type PartsSelectorProps = {
   selectedCategoryIndex: number;
   onSelectPart: (categoryIndex: number, partIndex: number) => void;
   onSelectCategory: (categoryIndex: number) => void;
+  disabled?: boolean; 
 };
 
 function RingIcon({ className }: { className?: string }) {
@@ -33,6 +34,7 @@ export default function PartsSelector({
   selectedCategoryIndex,
   onSelectPart,
   onSelectCategory,
+  disabled = false, 
 }: PartsSelectorProps) {
   return (
     <section className="flex flex-col gap-2">
@@ -47,7 +49,8 @@ export default function PartsSelector({
             <button
               key={part.name}
               onClick={() => onSelectCategory(categoryIndex)}
-              className={`flex flex-1 flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all duration-200 ${
+              disabled={disabled}
+              className={`flex flex-1 flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none ${
                 selectedCategoryIndex === categoryIndex
                   ? "border-slate-800 bg-slate-100 shadow-md dark:border-slate-400 dark:bg-slate-800/80"
                   : "border-slate-200 bg-slate-50/80 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-slate-600"
@@ -66,7 +69,8 @@ export default function PartsSelector({
               <button
                 key={partIndex}
                 onClick={() => onSelectPart(selectedCategoryIndex, partIndex)}
-                className={`flex h-20 min-w-[5rem] flex-shrink-0 items-center justify-center rounded-xl border-2 transition-all duration-200 ${
+                disabled={disabled}
+                className={`flex h-20 min-w-20 shrink-0 items-center justify-center rounded-xl border-2 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none ${
                   selectedParts[selectedCategoryIndex] === partIndex
                     ? "border-slate-800 bg-slate-100 shadow-md dark:border-slate-400 dark:bg-slate-800/80"
                     : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-slate-600"
@@ -92,7 +96,8 @@ export default function PartsSelector({
                 <button
                   key={partIndex}
                   onClick={() => onSelectPart(categoryIndex, partIndex)}
-                  className={`flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all duration-200 hover:shadow-md ${
+                  disabled={disabled}
+                  className={`flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all duration-200 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed disabled:pointer-events-none ${
                     selectedParts[categoryIndex] === partIndex
                       ? "border-slate-800 bg-slate-100 shadow-md dark:border-slate-400 dark:bg-slate-800/80"
                       : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-slate-600"
