@@ -12,8 +12,10 @@ export default function Home() {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const [displayType, setDisplayType] = useState("ring-only");
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   const handleSelectPart = (categoryIndex: number, partIndex: number) => {
     if (isGenerating) return;
@@ -34,25 +36,63 @@ export default function Home() {
     setDisplayType(id);
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
+    abortRef.current?.abort();
+    const ac = new AbortController();
+    abortRef.current = ac;
+
     setIsGenerating(true);
     setGeneratedImageUrl(null);
+    setAiSuggestion(null);
+    setApiError(null);
 
-    // 仮: 2秒後に完了（後で AI 生成 API に差し替え）
-    timeoutRef.current = setTimeout(() => {
-      setGeneratedImageUrl(
-        "https://placehold.co/400x400/e2e8f0/64748b?text=Ring+Preview"
-      );
+    try {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selectedParts, displayType }),
+        signal: ac.signal,
+      });
+
+      const data = (await res.json()) as {
+        imageDataUrl?: string;
+        text?: string;
+        error?: string;
+        details?: string;
+      };
+
+      if (!res.ok) {
+        const details = data.details ?? "";
+        console.error("/api/generate:", data.error, details);
+        const quotaLike =
+          /quota|exceeded your current quota|limit:\s*0/i.test(details);
+        setApiError(
+          quotaLike
+            ? "Google AI の画像生成モデルが、現在の API キーでは利用できない状態です（無料枠の上限 0、またはクォータ超過）。Google AI Studio で課金・プランを確認するか、https://ai.google.dev/gemini-api/docs/rate-limits でレート制限を確認してください。"
+            : details || data.error || "生成エラーが発生しました。"
+        );
+        return;
+      }
+
+      if (data.imageDataUrl) {
+        setGeneratedImageUrl(data.imageDataUrl);
+        setAiSuggestion(null);
+      } else if (data.text) {
+        console.log(data.text);
+        setAiSuggestion(data.text);
+      }
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
+      console.error(e);
+    } finally {
       setIsGenerating(false);
-      timeoutRef.current = null;
-    }, 2000);
+      if (abortRef.current === ac) abortRef.current = null;
+    }
   };
 
   const handleCancel = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
+    abortRef.current?.abort();
+    abortRef.current = null;
     setIsGenerating(false);
   };
 
@@ -88,6 +128,8 @@ export default function Home() {
       <div className="flex flex-1 flex-col p-6 md:p-10">
         <ResultPreview
           imageUrl={generatedImageUrl}
+          aiSuggestion={aiSuggestion}
+          apiError={apiError}
           isGenerating={isGenerating}
         />
       </div>

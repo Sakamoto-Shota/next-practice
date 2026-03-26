@@ -40,15 +40,29 @@ function DownloadIcon() {
 
 type ResultPreviewProps = {
   imageUrl: string | null;
+  /** Gemini テキスト提案（画像生成前の疎通確認用） */
+  aiSuggestion?: string | null;
+  /** API 失敗時のユーザー向けメッセージ */
+  apiError?: string | null;
   isGenerating?: boolean;
 };
 
 export default function ResultPreview({
   imageUrl,
+  aiSuggestion = null,
+  apiError = null,
   isGenerating = false,
 }: ResultPreviewProps) {
   return (
     <section className="flex flex-col gap-4">
+      {apiError && !isGenerating && (
+        <div
+          role="alert"
+          className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-100"
+        >
+          {apiError}
+        </div>
+      )}
       <div className="relative flex min-h-[320px] w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-gradient-to-br from-slate-50 via-slate-100/50 to-slate-200/30 dark:border-slate-700 dark:from-slate-900/80 dark:via-slate-800/50 dark:to-slate-900 md:min-h-[480px]">
         {isGenerating ? (
           <div className="flex flex-col items-center gap-4">
@@ -66,6 +80,15 @@ export default function ResultPreview({
             alt="生成された指輪"
             className="max-h-full max-w-full object-contain"
           />
+        ) : aiSuggestion ? (
+          <div className="max-h-full max-w-full overflow-auto px-4 py-6 text-center">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              AI からの提案（テキスト）
+            </p>
+            <p className="mt-3 text-base leading-relaxed text-slate-800 dark:text-slate-200">
+              {aiSuggestion}
+            </p>
+          </div>
         ) : (
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="rounded-full bg-slate-200/80 p-4 dark:bg-slate-700/50">

@@ -1,6 +1,7 @@
 "use client";
 
 import partsData from "../../data/parts.json";
+import { partImageUrl } from "@/lib/partImages";
 
 const parts = partsData.categories as { name: string; count: number }[];
 
@@ -11,23 +12,6 @@ type PartsSelectorProps = {
   onSelectCategory: (categoryIndex: number) => void;
   disabled?: boolean; 
 };
-
-function RingIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="8" />
-      <circle cx="12" cy="12" r="4" />
-    </svg>
-  );
-}
 
 export default function PartsSelector({
   selectedParts,
@@ -56,7 +40,11 @@ export default function PartsSelector({
                   : "border-slate-200 bg-slate-50/80 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-slate-600"
               }`}
             >
-              <RingIcon className="h-8 w-8 text-slate-500 dark:text-slate-400" />
+              <img
+                src={partImageUrl(categoryIndex, selectedParts[categoryIndex])}
+                alt=""
+                className="h-10 w-10 object-contain"
+              />
               <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
                 {part.name}
               </span>
@@ -77,7 +65,11 @@ export default function PartsSelector({
                 }`}
                 aria-label={`オプション ${partIndex + 1}`}
               >
-                <RingIcon className="h-6 w-6 text-slate-500 dark:text-slate-400" />
+                <img
+                  src={partImageUrl(selectedCategoryIndex, partIndex)}
+                  alt=""
+                  className="h-14 w-14 object-contain"
+                />
               </button>
             )
           )}
@@ -104,7 +96,11 @@ export default function PartsSelector({
                   }`}
                   aria-label={`${part.name} オプション ${partIndex + 1}`}
                 >
-                  <RingIcon className="h-7 w-7 text-slate-500 dark:text-slate-400" />
+                  <img
+                    src={partImageUrl(categoryIndex, partIndex)}
+                    alt=""
+                    className="h-16 w-16 object-contain"
+                  />
                 </button>
               ))}
             </div>
