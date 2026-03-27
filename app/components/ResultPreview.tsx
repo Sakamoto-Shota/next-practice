@@ -1,3 +1,7 @@
+"use client";
+
+import { useCallback } from "react";
+
 function UploadIcon() {
   return (
     <svg
@@ -38,6 +42,24 @@ function DownloadIcon() {
   );
 }
 
+const DOWNLOAD_FILENAME = "ring-design.png";
+
+function downloadDataUrl(imageUrl: string, filename: string) {
+  const a = document.createElement("a");
+  a.href = imageUrl;
+  a.download = filename;
+  a.rel = "noopener";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+async function dataUrlToFile(dataUrl: string, filename: string): Promise<File> {
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  return new File([blob], filename, { type: blob.type || "image/png" });
+}
+
 type ResultPreviewProps = {
   imageUrl: string | null;
   /** Gemini テキスト提案（画像生成前の疎通確認用） */
@@ -53,6 +75,42 @@ export default function ResultPreview({
   apiError = null,
   isGenerating = false,
 }: ResultPreviewProps) {
+  const hasImage = Boolean(imageUrl);
+
+  const handleDownload = useCallback(() => {
+    if (!imageUrl) return;
+    downloadDataUrl(imageUrl, DOWNLOAD_FILENAME);
+  }, [imageUrl]);
+
+  const handleShare = useCallback(async () => {
+    if (!imageUrl) return;
+    try {
+      const file = await dataUrlToFile(imageUrl, DOWNLOAD_FILENAME);
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({
+          files: [file],
+          title: "指輪デザイン",
+          text: "カスタム指輪のイメージ",
+        });
+        return;
+      }
+      window.alert(
+        "このブラウザでは画像の共有ができません。ダウンロードボタンから保存してください。"
+      );
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
+      console.error("share:", e);
+      window.alert("共有を完了できませんでした。");
+    }
+  }, [imageUrl]);
+
+  const iconButtonClass =
+    "flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-40 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:disabled:opacity-40";
+
   return (
     <section className="flex flex-col gap-4">
       {apiError && !isGenerating && (
@@ -90,48 +148,52 @@ export default function ResultPreview({
             </p>
           </div>
         ) : (
-        <div className="flex flex-col items-center gap-2 text-center">
-          <div className="rounded-full bg-slate-200/80 p-4 dark:bg-slate-700/50">
-            <svg
-              className="h-12 w-12 text-slate-500 dark:text-slate-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="8" />
-              <circle cx="12" cy="12" r="4" />
-            </svg>
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="rounded-full bg-slate-200/80 p-4 dark:bg-slate-700/50">
+              <svg
+                className="h-12 w-12 text-slate-500 dark:text-slate-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="8" />
+                <circle cx="12" cy="12" r="4" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+              生成画像表示エリア
+            </p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              「デザインを作成」をクリックしてプレビューを表示
+            </p>
           </div>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-            生成画像表示エリア
-          </p>
-          <p className="text-xs text-slate-400 dark:text-slate-500">
-            「デザインを作成」をクリックしてプレビューを表示
-          </p>
-        </div>
         )}
-           </div> 
+      </div>
       {/* ボタンは常に画像の下（PC/SP共通）*/}
       {!isGenerating && (
-      <div className="flex justify-end gap-3">
-        <button
-          type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
-          aria-label="アップロード"
-        >
-          <UploadIcon />
-        </button>
-        <button
-          type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-all hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
-          aria-label="ダウンロード"
-        >
-          <DownloadIcon />
-        </button>
-      </div>
+        <div className="flex justify-end gap-3">
+          <button
+            type="button"
+            className={iconButtonClass}
+            aria-label="共有"
+            disabled={!hasImage}
+            onClick={handleShare}
+          >
+            <UploadIcon />
+          </button>
+          <button
+            type="button"
+            className={iconButtonClass}
+            aria-label="ダウンロード"
+            disabled={!hasImage}
+            onClick={handleDownload}
+          >
+            <DownloadIcon />
+          </button>
+        </div>
       )}
     </section>
   );
